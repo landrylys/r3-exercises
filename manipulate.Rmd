@@ -1,0 +1,75 @@
+---
+title: "Manipulate"
+author: "L Landry"
+date: "7/26/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read online table
+
+### Download table ('*.csv') from 'https://oceanview.pfeg.noaa.gov/erddap/tabledap/cciea_AC.html'
+```{r}
+# set variables
+csv_url  <- "https://oceanview.pfeg.noaa.gov/erddap/tabledap/cciea_AC.csv"
+
+# if ERDDAP server down (Error in download.file) with URL above, use this:
+#    csv_url <- "https://raw.githubusercontent.com/noaa-iea/r3-train/master/data/cciea_AC.csv"
+dir_data <- "data"
+
+# derived variables
+csv <- file.path(dir_data, basename(csv_url))
+
+# create directory
+dir.create(dir_data, showWarnings = F)
+
+# download file
+if (!file.exists(csv))
+  download.file(csv_url, csv)
+
+```
+
+### Read table 'read.csv()'
+
+```{r}
+# attempt to read csv
+d <- read.csv(csv)
+
+# show the data frame
+d
+
+# convert to tibble
+tibble::tibble(d)
+```
+
+```yaml
+editor_options:
+  chunk_output_type: console
+```
+
+```{r}
+
+# read csv by skipping first two lines, so no header
+d <- read.csv(csv, skip = 2, header = FALSE)
+d
+
+# update data frame to original column names
+names(d) <- names(read.csv(csv))
+d
+
+# update for future reuse (NEW!)
+write.csv(d, csv, row.names = F)
+```
+
+### Show table 'DT::datatable()'
+
+```{r}
+# show table
+DT::datatable(d) # same as calling library(DT) and ask for see
+```
+
+
+
