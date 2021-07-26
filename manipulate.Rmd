@@ -71,5 +71,6 @@ write.csv(d, csv, row.names = F)
 DT::datatable(d) # same as calling library(DT) and ask for see
 ```
 
-
+#------------#
+Je suis rendue au temps 56 minutes du vidéo
 
